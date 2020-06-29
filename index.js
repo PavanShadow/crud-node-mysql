@@ -38,7 +38,7 @@ app.get('/employees', (req, res) => {
 
 //get one employee
 app.get('/employees/:id', (req, res) => {
-    mysqlcon.query('select * from employee where empId = ?', [req.params.id], (err, rows, fields) => {
+    mysqlcon.query('select * from employee where EmpId = ?', [req.params.id], (err, rows, fields) => {
         if (!err)
             res.send(rows);
         else
@@ -48,7 +48,7 @@ app.get('/employees/:id', (req, res) => {
 
 //delete one employee
 app.delete('/employees/:id', (req, res) => {
-    mysqlcon.query('delete from employee where empId = ?', [req.params.id], (err, rows, fields) => {
+    mysqlcon.query('delete from employee where EmpId = ?', [req.params.id], (err, rows, fields) => {
         if (!err)
             res.send(rows);
         else
@@ -67,11 +67,24 @@ app.post('/employees', (req, res) => {
 });
 
 //update an employeee
-
 app.put('/employees/:id', (req, res) => {
     mysqlcon.query('update employee set EmpName = ?, EmpCity = ?, EmpSalary = ? where EmpId = ?', [req.body.ename, req.body.ecity, req.body.esalary, req.params.id], (err, rows, fields) => {
         if (!err)
             res.send(rows);
+        else
+            console.log(err);
+    })
+});
+
+//admin login
+app.post('/admins', (req, res) => {
+    mysqlcon.query('select * from admin where AdminUname = ? and AdminPwd = ?', [req.body.uname, req.body.password], (err, rows, fields) => {
+        if (!err) {
+            if (rows.length > 0)
+                res.send({code: 'Success'});
+            else
+                res.send({code: 'Error'});
+        }
         else
             console.log(err);
     })
