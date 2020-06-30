@@ -29,8 +29,9 @@ app.use(cors({ origin: 'http://localhost:4200' }));
 //get employees
 app.get('/employees', (req, res) => {
     mysqlcon.query('select * from employee', (err, rows, fields) => {
-        if (!err)
+        if (!err) {
             res.send(rows);
+        }
         else
             console.log(err);
     })
@@ -50,7 +51,7 @@ app.get('/employees/:id', (req, res) => {
 app.delete('/employees/:id', (req, res) => {
     mysqlcon.query('delete from employee where EmpId = ?', [req.params.id], (err, rows, fields) => {
         if (!err)
-            res.send(rows);
+            res.send({ status: 'Success' });
         else
             console.log(err);
     })
@@ -60,7 +61,7 @@ app.delete('/employees/:id', (req, res) => {
 app.post('/employees', (req, res) => {
     mysqlcon.query('insert into employee(EmpId, EmpName,EmpCity,EmpSalary) values(?,?,?,?)', [req.body.eid, req.body.ename, req.body.ecity, req.body.esalary], (err, rows, fields) => {
         if (!err)
-            res.send(rows);
+            res.send({ status: 'Success' });
         else
             console.log(err);
     })
@@ -70,7 +71,7 @@ app.post('/employees', (req, res) => {
 app.put('/employees/:id', (req, res) => {
     mysqlcon.query('update employee set EmpName = ?, EmpCity = ?, EmpSalary = ? where EmpId = ?', [req.body.ename, req.body.ecity, req.body.esalary, req.params.id], (err, rows, fields) => {
         if (!err)
-            res.send(rows);
+            res.send({ status: 'Success' });
         else
             console.log(err);
     })
@@ -81,9 +82,9 @@ app.post('/admins', (req, res) => {
     mysqlcon.query('select * from admin where AdminUname = ? and AdminPwd = ?', [req.body.uname, req.body.password], (err, rows, fields) => {
         if (!err) {
             if (rows.length > 0)
-                res.send({code: 'Success'});
+                res.send({ status: 'Success' });
             else
-                res.send({code: 'Error'});
+                res.send({ status: 'Error' });
         }
         else
             console.log(err);
